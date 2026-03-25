@@ -5,7 +5,7 @@ import { formatOpenAiChatMessages } from '../../common/utils/ai.utils';
 
 export const createOpenAiProvider = (): AiProvider => {
   const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY || 'dummy-key-to-prevent-startup-crash',
   });
 
   return {

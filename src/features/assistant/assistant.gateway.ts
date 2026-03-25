@@ -19,17 +19,17 @@ export class AssistantGateway {
   @WebSocketServer()
   server: Server;
 
-  readonly handleAskEvent: (data: { prompt: string; provider?: string }, client: Socket) => void;
+  readonly handleAskEvent: (data: { prompt: string; provider?: string; model?: string }, client: Socket) => void;
 
   constructor(assistantService: AssistantService) {
     this.handleAskEvent = (data, client) => {
-      assistantService.askStream(data.prompt, data.provider).subscribe(handleStream(client));
+      assistantService.askStream(data.prompt, data.provider, data.model).subscribe(handleStream(client));
     };
   }
 
   @SubscribeMessage('ask')
   handleAsk(
-    @MessageBody() data: { prompt: string; provider?: string },
+    @MessageBody() data: { prompt: string; provider?: string; model?: string },
     @ConnectedSocket() client: Socket,
   ) {
     return this.handleAskEvent(data, client);

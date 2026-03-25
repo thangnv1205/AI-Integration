@@ -1,24 +1,23 @@
-import OpenAI from 'openai';
+import axios from 'axios';
 
 export interface Embeddings {
   createEmbedding(text: string): Promise<number[]>;
 }
 
 export const createEmbeddings = (): Embeddings => {
-  const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+  const baseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+  const model = process.env.OLLAMA_EMBEDDING_MODEL || 'nomic-embed-text';
 
   return {
     createEmbedding: async (text: string): Promise<number[]> => {
       try {
-        const response = await client.embeddings.create({
-          model: 'text-embedding-3-small',
-          input: text,
+        const response = await axios.post(`${baseUrl}/api/embeddings`, {
+          model,
+          prompt: text,
         });
-        return response.data[0].embedding;
-      } catch (error) {
-        throw new Error(`Embedding Error: ${error.message}`);
+        return response.data.embedding;
+      } catch (error: any) {
+        throw new Error(`Ollama Embedding Error: ${error.message}`);
       }
     },
   };

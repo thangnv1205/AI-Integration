@@ -5,22 +5,22 @@ import { buildAugmentedPrompt } from '@core/common/utils/ai.utils';
 
 // Pure Functions — all actual logic is here, no class, no `this`
 
-const ask = (aiEngine: AiEngine) => (prompt: string, provider = 'ollama') =>
-  aiEngine.generateResponse(provider, prompt);
+const ask = (aiEngine: AiEngine) => (prompt: string, provider = 'ollama', model?: string) =>
+  aiEngine.generateResponse(provider, prompt, { model });
 
 const askWithContext =
   (aiEngine: AiEngine, vectorStore: VectorStore) =>
-  async (prompt: string, provider = 'ollama') => {
+  async (prompt: string, provider = 'ollama', model?: string) => {
     const contextDocs = await vectorStore.search(prompt);
     const contextText = contextDocs.map((d) => d.text).join('\n---\n');
-    return aiEngine.generateResponse(provider, buildAugmentedPrompt(contextText, prompt));
+    return aiEngine.generateResponse(provider, buildAugmentedPrompt(contextText, prompt), { model });
   };
 
 const learn = (vectorStore: VectorStore) => (text: string, metadata: any = {}) =>
   vectorStore.addDocument(text, metadata);
 
-const askStream = (aiEngine: AiEngine) => (prompt: string, provider = 'ollama') =>
-  aiEngine.generateStream(provider, prompt);
+const askStream = (aiEngine: AiEngine) => (prompt: string, provider = 'ollama', model?: string) =>
+  aiEngine.generateStream(provider, prompt, { model });
 
 const getProviders = (aiEngine: AiEngine) => () => aiEngine.getAvailableProviders();
 

@@ -6,13 +6,13 @@ export class AssistantController {
   constructor(private readonly assistantService: AssistantService) {}
 
   @Post('ask')
-  ask(@Body() body: { prompt: string; provider?: string }) {
-    return this.assistantService.ask(body.prompt, body.provider);
+  ask(@Body() body: { prompt: string; provider?: string; model?: string }) {
+    return this.assistantService.ask(body.prompt, body.provider, body.model);
   }
 
   @Post('ask-with-context')
-  askWithContext(@Body() body: { prompt: string; provider?: string }) {
-    return this.assistantService.askWithContext(body.prompt, body.provider);
+  askWithContext(@Body() body: { prompt: string; provider?: string; model?: string }) {
+    return this.assistantService.askWithContext(body.prompt, body.provider, body.model);
   }
 
   @Post('learn')

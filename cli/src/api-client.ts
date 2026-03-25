@@ -8,13 +8,13 @@ export interface ChatResponse {
 
 // Pure factory function — no class, no `this`
 export const createApiClient = (baseUrl: string = 'http://localhost:3000') => {
-  const ask = async (prompt: string, provider = 'ollama'): Promise<ChatResponse> => {
-    const res = await axios.post(`${baseUrl}/assistant/ask`, { prompt, provider });
+  const ask = async (prompt: string, provider = 'ollama', model?: string): Promise<ChatResponse> => {
+    const res = await axios.post(`${baseUrl}/assistant/ask`, { prompt, provider, model });
     return res.data;
   };
 
-  const askWithContext = async (prompt: string, provider = 'ollama'): Promise<ChatResponse> => {
-    const res = await axios.post(`${baseUrl}/assistant/ask-with-context`, { prompt, provider });
+  const askWithContext = async (prompt: string, provider = 'ollama', model?: string): Promise<ChatResponse> => {
+    const res = await axios.post(`${baseUrl}/assistant/ask-with-context`, { prompt, provider, model });
     return res.data;
   };
 
@@ -30,6 +30,7 @@ export const createApiClient = (baseUrl: string = 'http://localhost:3000') => {
   const streamAsk = (
     prompt: string,
     provider = 'ollama',
+    model: string | undefined,
     onChunk: (chunk: string) => void,
     onComplete: () => void,
     onError: (err: string) => void,
@@ -37,7 +38,7 @@ export const createApiClient = (baseUrl: string = 'http://localhost:3000') => {
     const socket = io(baseUrl);
 
     socket.on('connect', () => {
-      socket.emit('ask', { prompt, provider });
+      socket.emit('ask', { prompt, provider, model });
     });
 
     socket.on('chat-chunk', onChunk);

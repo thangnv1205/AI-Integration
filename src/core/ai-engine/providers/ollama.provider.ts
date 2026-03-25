@@ -10,7 +10,7 @@ export const createOllamaProvider = (): AiProvider => {
     name: 'ollama',
 
     generateResponse: async (prompt: string, options?: any): Promise<AiResponse> => {
-      const model = options?.model || 'llama3';
+      const model = options?.model || process.env.OLLAMA_MODEL || 'qwen2.5';
       try {
         const response = await axios.post(`${baseUrl}/api/generate`, {
           model,
@@ -26,7 +26,7 @@ export const createOllamaProvider = (): AiProvider => {
     },
 
     generateStream: (prompt: string, options?: any): Observable<string> => {
-      const model = options?.model || 'llama3';
+      const model = options?.model || process.env.OLLAMA_MODEL || 'qwen2.5';
       return new Observable((subscriber) => {
         axios
           .post(`${baseUrl}/api/generate`, { model, prompt, stream: true }, { responseType: 'stream' })
