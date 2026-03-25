@@ -17,7 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "keploy:record": "keploy record -c \"npm run start:dev\"",
+    "keploy:test": "keploy test -c \"npm run start:dev\" --delay 10"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -29,7 +31,10 @@
     "axios": "^1.13.6",
     "openai": "^6.32.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -54,7 +59,9 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
-    "typescript-eslint": "^8.20.0"
+    "typescript-eslint": "^8.20.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0"
   },
   "jest": {
     "moduleFileExtensions": [

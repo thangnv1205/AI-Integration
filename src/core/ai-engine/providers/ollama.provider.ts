@@ -19,6 +19,11 @@ export const createOllamaProvider = (): AiProvider => {
         });
         return {
           text: response.data.response,
+          usage: {
+            promptTokens: response.data.prompt_eval_count || 0,
+            completionTokens: response.data.eval_count || 0,
+            totalTokens: (response.data.prompt_eval_count || 0) + (response.data.eval_count || 0),
+          },
         };
       } catch (error) {
         throw new Error(`Ollama Error: ${error.message}`);

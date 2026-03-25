@@ -1,23 +1,29 @@
 import { Module } from '@nestjs/common';
 import { AiEngineModule } from '../ai-engine/ai-engine.module';
 import { AgentRegistry } from './agent-registry.service';
-import { DelegateTaskTool } from './tools/delegate-task.tool';
-import { ManagerAgent } from './manager.agent';
-import { ResearcherAgent } from './workers/researcher.agent';
-import { CoderAgent } from './workers/coder.agent';
+import { WhiteHorseService } from './white-horse.service';
+import { OrchestratorAgent } from './orchestrator.agent';
+import { SwarmRegistry } from './swarm-registry.service';
+import { WukongAgent } from './disciples/wukong.agent';
+import { PiggyAgent } from './disciples/piggy.agent';
+import { SandMonkAgent } from './disciples/sand-monk.agent';
 
 @Module({
   imports: [AiEngineModule],
   providers: [
     AgentRegistry,
-    DelegateTaskTool,
-    ManagerAgent,
-    ResearcherAgent,
-    CoderAgent,
+    SwarmRegistry,
+    WhiteHorseService,
+    OrchestratorAgent,
+    WukongAgent,
+    PiggyAgent,
+    SandMonkAgent,
   ],
   exports: [
     AgentRegistry,
-    ManagerAgent,
+    SwarmRegistry,
+    WhiteHorseService,
+    OrchestratorAgent,
   ],
 })
 export class AgentsModule {}

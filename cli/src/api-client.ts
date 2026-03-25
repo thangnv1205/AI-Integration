@@ -3,7 +3,11 @@ import { io, Socket } from 'socket.io-client';
 
 export interface ChatResponse {
   text: string;
-  usage?: { totalTokens: number };
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
 }
 
 // Pure factory function — no class, no `this`
@@ -54,5 +58,50 @@ export const createApiClient = (baseUrl: string = 'http://localhost:3000') => {
     return socket;
   };
 
-  return { ask, askWithContext, learn, getProviders, streamAsk };
+  const runSwarm = async (task: string): Promise<ChatResponse> => {
+    const res = await axios.post(`${baseUrl}/assistant/swarm`, { task });
+    return res.data;
+  };
+
+  const runSwarmStep = async (task: string): Promise<ChatResponse> => {
+    const res = await axios.post(`${baseUrl}/assistant/swarm-step`, { task });
+    return res.data;
+  };
+
+  const runSwarmNext = async (): Promise<ChatResponse> => {
+    const res = await axios.post(`${baseUrl}/assistant/swarm-next`);
+    return res.data;
+  };
+
+  const getSwarmRoles = async (): Promise<any[]> => {
+    const res = await axios.get(`${baseUrl}/assistant/swarm-roles`);
+    return res.data;
+  };
+
+  const updateSwarmRoleModel = async (roleId: string, model: string): Promise<{ success: boolean }> => {
+    const res = await axios.post(`${baseUrl}/assistant/swarm-role-model`, { roleId, model });
+    return res.data;
+  };
+
+  const listSwarms = async (): Promise<any[]> => {
+    const res = await axios.get(`${baseUrl}/assistant/swarms`);
+    return res.data;
+  };
+
+  const listCommandGroups = async (): Promise<any[]> => {
+    const res = await axios.get(`${baseUrl}/assistant/command-groups`);
+    return res.data;
+  };
+
+  const setSwarm = async (templateId: string): Promise<{ success: boolean }> => {
+    const res = await axios.post(`${baseUrl}/assistant/swarm-set`, { templateId });
+    return res.data;
+  };
+
+  return { 
+    ask, askWithContext, learn, getProviders, streamAsk, 
+    runSwarm, runSwarmStep, runSwarmNext, 
+    getSwarmRoles, updateSwarmRoleModel,
+    listSwarms, listCommandGroups, setSwarm 
+  };
 };

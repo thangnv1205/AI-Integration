@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'; // Trigger reload for /swarm route
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { CoreModule } from '@core/core.module';
 import { AssistantModule } from '@features/assistant/assistant.module';
 import { AutomationModule } from '@features/automation/automation.module';
+import { PixelAgentModule } from '@features/pixel-agents/pixel-agent.module';
 
 @Module({
   imports: [
@@ -12,8 +12,9 @@ import { AutomationModule } from '@features/automation/automation.module';
     CoreModule,
     AssistantModule,
     AutomationModule,
+    PixelAgentModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
